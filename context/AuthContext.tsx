@@ -19,9 +19,11 @@ interface IAuthContext {
   user: string | null;
   profile: string | null;
   errorMessage?: string | null;
+  isLoading: boolean;
   login?: () => void;
   clearErrorMessage?: () => void;
   register?: () => void;
+  tryLocalLogin?: () => void;
 }
 
 interface ILogin {
@@ -29,7 +31,7 @@ interface ILogin {
   password: string 
 }
  
-const defaultValue = { token: null, user: null, profile: null, errorMessage: null, };
+const defaultValue = { token: null, user: null, profile: null, errorMessage: null, isLoading: true, };
 
 const Context = React.createContext<IAuthContext>(defaultValue);
 
@@ -37,7 +39,7 @@ const Provider = ({ children }: { children: ReactElement }) => {
   const reducer = (state: any, action: Action) => {
     switch (action.type) {
       case "login":
-        return { ...state, ...action.payload, errorMessage: null };
+        return { ...state, ...action.payload, errorMessage: null, isLoading: false, };
       case "user_created":
         return {...state, errorMessage: null}
       case "add_error":
@@ -99,8 +101,21 @@ const Provider = ({ children }: { children: ReactElement }) => {
       dispatch({type: "clear_error_message"});
     }
 
+    const tryLocalLogin = (dispatch: any) => async () => {
+      let token, user, profile;
+      try{
+        token = await SecureStore.getItemAsync("token")
+        user = await SecureStore.getItemAsync("user")
+        profile = await SecureStore.getItemAsync("profile")
+
+        dispatch({type: "login", payload: {token, profile, user},})
+      }catch(err){
+        console.log(err)
+      }
+    }
+
   return (
-    <Context.Provider value={{ ...state, login: login(dispatch), clearErrorMessage: clearErrorMessage(dispatch), register: register(dispatch), }}>
+    <Context.Provider value={{ ...state, login: login(dispatch), clearErrorMessage: clearErrorMessage(dispatch), register: register(dispatch), tryLocalLogin: tryLocalLogin(dispatch), }}>
       {children}
     </Context.Provider>
   );

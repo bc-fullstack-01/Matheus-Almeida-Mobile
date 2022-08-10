@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "App",
-    "slug": "App",
+    "name": "Parrot",
+    "slug": "parrot",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/imagens/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/imagens/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
