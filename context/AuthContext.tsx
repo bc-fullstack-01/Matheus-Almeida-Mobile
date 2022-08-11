@@ -3,15 +3,11 @@ import * as SecureStore from 'expo-secure-store'
 import server from "../api/server";
 import jwt_decode from "jwt-decode";
 import {navigate} from '../RootNavigation';
+import {Action} from '../Models/Action'
 
 interface TokenUser {
   profile: string;
   user: string;
-}
-
-interface Action {
-  type: string;
-  payload: any;
 }
 
 interface IAuthContext {

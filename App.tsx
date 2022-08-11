@@ -4,21 +4,24 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer, TabActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { TouchableOpacity } from "react-native";
 import {MaterialIcons} from '@expo/vector-icons'
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
-import HomeScreen from "./screens/HomeScreen";
-import CreatePostScreen from "./screens/CreatePostScreen";
-import PostScreen from "./screens/PostScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfilesScreen from "./screens/ProfilesScreen";
+import HomeNavigationScreen from "./screens/HomeNavigationScreen";
 import {
   Provider as AuthProvider,
   Context as AuthContext,
 } from "./context/AuthContext";
+import {
+  Provider as PostProvider
+} from './context/PostContext'
 import {navigationRef} from './RootNavigation'
 
 const Stack = createNativeStackNavigator();
+
 const Tab = createBottomTabNavigator();
 
 const App = () => {
@@ -58,7 +61,7 @@ const App = () => {
               headerShown: false,
             })}
           >
-            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Home" component={HomeNavigationScreen} />
             <Tab.Screen name="Profiles" component={ProfilesScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
           </Tab.Navigator>
@@ -71,7 +74,9 @@ const App = () => {
 export default () => {
   return (
     <AuthProvider>
-      <App />
+      <PostProvider>
+        <App/>
+      </PostProvider>
     </AuthProvider>
   );
 };
