@@ -41,11 +41,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "stretch",
     marginTop: 100,
     marginBottom: 150,
   },
   link: {
+    textAlign: 'center',
     color: 'blue',
   },
   errorText: {

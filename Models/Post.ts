@@ -17,4 +17,5 @@ export interface Post {
   image: boolean;
   comments: Comment[];
   likes: string[];
+  //liked?: boolean | undefined;
 }

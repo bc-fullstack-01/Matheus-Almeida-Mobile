@@ -20,6 +20,7 @@ interface IAuthContext {
   clearErrorMessage?: () => void;
   register?: () => void;
   tryLocalLogin?: () => void;
+  logout?: () => void;
 }
 
 interface ILogin {
@@ -42,6 +43,13 @@ const Provider = ({ children }: { children: ReactElement }) => {
         return {...state, errorMessage: action.payload}
       case "clear_error_message":
         return {...state, errorMessage: null };
+      case "logout":
+        return {
+          token: null,
+          profile: null,
+          user: null,
+          errorMessage: null,
+        };
       default:
         return state;
     }
@@ -77,6 +85,17 @@ const Provider = ({ children }: { children: ReactElement }) => {
       }
     };
 
+    const logout = (dispatch: any) => async () => {
+      try{
+        await SecureStore.deleteItemAsync("token");
+        await SecureStore.deleteItemAsync("user");
+        await SecureStore.deleteItemAsync("profile");
+        dispatch({type: "logout"});
+      }catch(err){
+        console.log(err)
+      }
+    }
+
     const register = (dispatch: any) => async ({user, password} : ILogin) => {
       try{
         await server.post("/security/register", {
@@ -111,7 +130,7 @@ const Provider = ({ children }: { children: ReactElement }) => {
     }
 
   return (
-    <Context.Provider value={{ ...state, login: login(dispatch), clearErrorMessage: clearErrorMessage(dispatch), register: register(dispatch), tryLocalLogin: tryLocalLogin(dispatch), }}>
+    <Context.Provider value={{ ...state, login: login(dispatch), clearErrorMessage: clearErrorMessage(dispatch), register: register(dispatch), tryLocalLogin: tryLocalLogin(dispatch), logout: logout(dispatch),}}>
       {children}
     </Context.Provider>
   );

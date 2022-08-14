@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { Card } from '@rneui/base';
 import CustomAvatar from './CustomAvatar';
 import {MaterialIcons} from '@expo/vector-icons'
 import FavoriteIconButton from './FavoriteIconButton';
 import {Post} from "../Models/Post";
+import {Context as PostContext} from '../context/PostContext'
 
 interface Props{
   post: Post;
 }
 
 export default function PostItem ({post} : Props) {
+  const {likePost, unlikePost} = useContext(PostContext)
+
   return (
     <TouchableOpacity>
       <Card>
@@ -25,7 +28,11 @@ export default function PostItem ({post} : Props) {
         )}
         <Card.Divider />
           <View style={styles.actionContainer}>
-            <FavoriteIconButton liked={true} handleLike={() => {}}/>
+            <FavoriteIconButton liked={post.liked} handleLike={() => {
+             post.liked
+             ? unlikePost && unlikePost({id: post._id})
+             : likePost && likePost({id: post._id});
+            }}/>
             <Text style={styles.actionItemStyle}>{post.likes.length}</Text>
             <MaterialIcons name='chat-bubble-outline' size={24} style={styles.actionItemStyle} />
             <Text style={styles.actionItemStyle}>{post.comments.length}</Text>

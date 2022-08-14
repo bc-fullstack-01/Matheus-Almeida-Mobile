@@ -34,9 +34,7 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer ref={navigationRef}>
-        { isLoading ? (
-          null
-        ) : !token ? (
+        { isLoading ? null : !token ? (
           <Stack.Navigator
             screenOptions={({ route, navigation }) => ({
               headerShown: false,
